@@ -1,0 +1,50 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary", "objc_library")
+
+cc_library(
+    name = "imgui",
+    hdrs = [
+        "imgui.h",
+    ],
+    srcs = [
+        "imconfig.h",
+        "imgui.cpp",
+        "imgui_draw.cpp",
+        "imgui_internal.h",
+        "imgui_tables.cpp",
+        "imgui_widgets.cpp",
+        "imstb_rectpack.h",
+        "imstb_textedit.h",
+        "imstb_truetype.h",
+    ],
+    includes = ["."],
+)
+
+objc_library(
+    name = "example_apple_metal_objc",
+    srcs = [
+        "backends/imgui_impl_metal.h",
+        "backends/imgui_impl_metal.mm",
+        "backends/imgui_impl_osx.h",
+        "backends/imgui_impl_osx.mm",
+        "examples/example_apple_metal/main.mm",
+    ],
+    deps = [":imgui"],
+    includes = ["backends"],
+    sdk_frameworks = [
+        "AppKit",
+        "GameController",
+        "Metal",
+        "MetalKit",
+    ],
+)
+
+cc_binary(
+    name = "example_apple_metal",
+    srcs = [
+        "imgui_demo.cpp",
+    ],
+    deps = [
+        ":imgui",
+        ":example_apple_metal_objc",
+    ],
+)
